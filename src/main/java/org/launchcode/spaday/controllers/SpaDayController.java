@@ -1,6 +1,6 @@
 package org.launchcode.spaday.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.launchcode.spaday.models.SpaForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -67,11 +67,7 @@ public class SpaDayController {
   }
   
   @PostMapping(value="")
-  public String spaMenu(@RequestParam String name, @RequestParam String skintype, @RequestParam String manipedi, Model model) {
-    model.addAttribute("name", name);
-    model.addAttribute("skintype", skintype);
-    model.addAttribute("manipedi", manipedi);
-    
+  public String spaMenu(@ModelAttribute SpaForm spaForm, Model model ) {
     ArrayList<String> facials = new ArrayList<String>();
     facials.add("Microdermabrasion");
     facials.add("Hydrofacial");
@@ -80,13 +76,13 @@ public class SpaDayController {
     
     ArrayList<String> appropriateFacials = new ArrayList<String>();
     for (int i = 0; i < facials.size(); i ++) {
-      if (checkSkinType(skintype,facials.get(i))) {
+      if (checkSkinType(spaForm.getSkintype(),facials.get(i))) {
         appropriateFacials.add(facials.get(i));
       }
     }
     
     model.addAttribute("appropriateFacials", appropriateFacials);
-    model.addAttribute("manipedi", manipedi);
+    model.addAttribute("manipedi", spaForm.getManipedi());
     return "menu";
   }
 }
